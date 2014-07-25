@@ -25,7 +25,7 @@ function ocr
   rm tmp.jpg tmp.txt 1>/dev/null 2>&1
   convert $gif58 $@ tmp.jpg
   tesseract tmp.jpg tmp digits 1>/dev/null 2>&1
-  sed -ie 's#[[:space:]]##g' tmp.txt
+  sed -e 's#[[:space:]]##g' -i "" tmp.txt
 }
 
 while [ $i -lt ${#options[@]} ]
