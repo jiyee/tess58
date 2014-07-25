@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# 58.com telphone number ocr program.
+# Attempt to mix imagemagick with tesseract.
+# Currently contains two convert strategies, defines in variables $options.
+# You could improve the convert strategies, or train tesseract, if it failed over and over.
+# 
+# author: shengxuanwei@renrenche.com
+# date: 2014-07-25
+
+gif58=$1
+
+if [ ! $1 ]
+then
+  echo 'need one parameter, input file name.' 
+  exit -1 
+fi
+
+i=0
+options=("-colorspace Gray" "-type grayscale -scale 100% -contrast -sharpen 1")
+reTel='^1[34578][0-9]{9}$|^[0-9]{8}$|^010-?[0-9]{8}$|^400[0-9]{7}$'
+
+function ocr
+{
+  rm tmp.jpg tmp.txt 1>/dev/null 2>&1
+  convert $gif58 $@ tmp.jpg
+  tesseract tmp.jpg tmp digits 1>/dev/null 2>&1
+  sed -ie 's#[[:space:]]##g' tmp.txt
+}
+
+while [ $i -lt ${#options[@]} ]
+do
+  ocr ${options[$i]}
+
+  if grep -Eq $reTel tmp.txt
+  then
+    cat tmp.txt
+    rm tmp.jpg tmp.txt 1>/dev/null 2>&1
+    exit 1
+  fi
+
+  echo "tesseract $i fail, continue..."
+  i=`expr $i + 1`
+done
+
+echo 'tesseract failed.'
+rm tmp.jpg tmp.txt 1>/dev/null 2>&1
+exit -1
