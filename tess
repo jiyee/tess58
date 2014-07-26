@@ -36,7 +36,7 @@ do
   then
     cat tmp.txt
     rm tmp.jpg tmp.txt 1>/dev/null 2>&1
-    exit 1
+    exit 0
   fi
 
   # echo "tesseract $i fail, continue..."
@@ -45,4 +45,4 @@ done
 
 echo 'tesseract failed.'
 rm tmp.jpg tmp.txt 1>/dev/null 2>&1
-exit -1
+exit 1
