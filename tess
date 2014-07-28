@@ -18,7 +18,7 @@ fi
 
 i=0
 options=("-colorspace Gray" "-type grayscale -scale 100% -contrast -sharpen 1")
-reTel='^(1[34578][0-9]{9}|[0-9]{8}|010-?[0-9]{8}|400[0-9]{7})$'
+reTel='^(1[34578][0-9]{9}|[^1][0-9]{7}|010-?[0-9]{8}|400[0-9]{7})$'
 
 function ocr
 {
